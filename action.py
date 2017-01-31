@@ -8,7 +8,7 @@ speech_engine = pyttsx.init()
 speech_engine.setProperty('rate', 150)
 
 # Wolfram Api
-app_id = "3H4RK9-WQ63W49WWW"
+app_id = "Your API id"
 client = wolframalpha.Client(app_id)
 # speech_engine.say('Hello Sir, How may I help you today ?')
 # speech_engine.runAndWait()
@@ -51,10 +51,10 @@ def cleanhtml(raw_html):
 
 def google_results(query):
     service = build("customsearch", "v1",
-                    developerKey="AIzaSyAeSL5HTHJcxH9SeeWfS_qf2nFWRHBc8HU")
+                    developerKey="Your google developer key")
 
     result = service.cse().list(
-            q=query, cx="014232785313891304027:nfy0x-f7cn8").execute()
+            q=query, cx="Your CSE key").execute()
     return cleanhtml(result["items"][00]["htmlSnippet"])
 
 running = True
@@ -89,6 +89,7 @@ while running:
     # speak("I heard you say " + v)
     print "Ready!"
 
+    '''Use this part for using Google Custom Search Engine API'''
     '''g_res = google_results(a)
     try:
         print g_res
