@@ -1,0 +1,13 @@
+pip install pyaudio
+pip install SpeechRecognition
+pip install pyttsx
+pip install wplframalpha
+
+MathematicalJarvis Appid
+3H4RK9-WQ63W49WWW
+
+PythonGoogleSearch
+ProjectID: alien-topic-157302
+api key: AIzaSyAeSL5HTHJcxH9SeeWfS_qf2nFWRHBc8HU
+cx: 014232785313891304027:nfy0x-f7cn8
+wiki cx: 014232785313891304027:epndcpzting
