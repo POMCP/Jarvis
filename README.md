@@ -14,11 +14,11 @@ Note: python win32 has to be installed for windows OS corresponding to the versi
       Additionally an API key must be procured from Wolframalpha for the queries to return responses.
       The same follows when using the Google api. In addition to the api key, the Custom Search Engine API has to be enabled and a CSE key       has to be procured. This could be done from here: https://cse.google.com/cse/all
       Input these keys in respective areas in action.py
-      For OSx installing pyaudio will result in an error such as "portaudio not found". The work around that solved this for me is,
+      For OSx installing pyaudio will result in an error such as "portaudio not found". The work around that solved this for me is,<br />
       xcode-select --install<br />
       brew remove portaudio<br />
       brew install portaudio<br />
-      pip install pyaudio . 
+      pip install pyaudio<br />
 
 # action.py
 
