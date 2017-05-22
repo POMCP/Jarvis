@@ -14,12 +14,18 @@ Note: python win32 has to be installed for windows OS corresponding to the versi
       Additionally an API key must be procured from Wolframalpha for the queries to return responses.
       The same follows when using the Google api. In addition to the api key, the Custom Search Engine API has to be enabled and a CSE key       has to be procured. This could be done from here: https://cse.google.com/cse/all
       Input these keys in respective areas in action.py
+      For OSx installing pyaudio will result in an error such as "portaudio not found". The work around that solved this for me is,
+      xcode-select --install
+      brew remove portaudio
+      brew install portaudio
+      pip install pyaudio . 
 
 # action.py
 
 This in the main executable for the code. It will basically fire a query to Wolframalpha api and read it out in response to a spoken question from the user. 
 Note: to activate the AI say "Hello Jarvis".
       The code is in development and changes will be added as and when progress is made. It is therefore, at the moment not bug free.
+    
 
 # Acknowledgements
 
