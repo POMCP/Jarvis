@@ -1,4 +1,3 @@
-pip install pyaudio
 pip install SpeechRecognition
-pip install pyttsx
 pip install wolframalpha
+pip install googletrans
