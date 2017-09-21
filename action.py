@@ -1,109 +1,134 @@
-import speech_recognition
-import pyttsx
+import speech_recognition as sr
 import wolframalpha
-from googleapiclient.discovery import build
-import re
-
-speech_engine = pyttsx.init()
-speech_engine.setProperty('rate', 150)
-
-# Wolfram Api
-app_id = "Your API id"
-client = wolframalpha.Client(app_id)
-# speech_engine.say('Hello Sir, How may I help you today ?')
-# speech_engine.runAndWait()
+from os import system
+import requests
+from googletrans import Translator
+import sys
 
 
-def speak(text):
-    speech_engine.say(text)
-    speech_engine.runAndWait()
+translator = Translator()
+r = sr.Recognizer()
+m = sr.Microphone()
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
-recognizer = speech_recognition.Recognizer()
-
-
-def listen():
-    with speech_recognition.Microphone() as source:
-        recognizer.adjust_for_ambient_noise(source)
-        audio = recognizer.listen(source)
-
-    try:
-        value = recognizer.recognize_google(audio)
-        if str is bytes:  # this version of Python uses bytes for strings (Python 2)
-            print(u"You said {}".format(value).encode("utf-8"))
-            a = format(value).encode("utf-8")
-        else:  # this version of Python uses unicode for strings (Python 3+)
-            print("You said {}".format(value))
-            a = format(value)
-        return value, a
-    except speech_recognition.UnknownValueError:
-        print("Oops! Didn't catch that")
-    except speech_recognition.RequestError as e:
-        print("Uh oh! Couldn't request results from Google Speech Recognition service; {0}".format(e))
-
-    return ""
-
-
-def cleanhtml(raw_html):
+'''def cleanhtml(raw_html):
     cleanr = re.compile('<.*?>')
     cleantext = re.sub(cleanr, '', raw_html)
     return cleantext
 
-
 def google_results(query):
     service = build("customsearch", "v1",
-                    developerKey="Your google developer key")
+                    developerKey="devkey")
 
     result = service.cse().list(
-            q=query, cx="Your CSE key").execute()
-    return cleanhtml(result["items"][00]["htmlSnippet"])
+            q=query, cx="cseKey").execute()
+    return cleanhtml(result["items"][00]["htmlSnippet"])'''
 
-running = True
-run = True
-print 'Listening...'
-while run:
-    v, a = listen()
-    if a in ['hello Jarvis', 'wake up Jarvis', 'hey']:
-        speak("Hello Sir, How may I help you today ?")
-        break
+# Wolfram Api
+app_id = "wolframAPIkey"
+client = wolframalpha.Client(app_id)
+run = False
+sleep = True
+greeting=True
 
-while running:
-    v, a = listen()
-    if a in ['exit', 'Exit', 'quit', 'goodbye Jarvis', 'Tata', 'tata']:
-        speak("Have a good day Sir!")
-        break
-    res = client.query(a)
-    try:
-        print next(res.results).text
-        speak(next(res.results).text)
-    except AttributeError:
-        print "Oops! Didn't catch that"
-        speak("Oops! Didn't catch that")
-    except StopIteration:
-        print "Couldn't find anything here, sorry"
-        speak("Couldn't find anything here, sorry")
-    except KeyError:
-        speak("Oops!, I am afraid I didn't catch that Sir")
-    except:
-        print "Something went wrong, Try again"
-        speak("I am not sure what happened. Please try again")
-    # speak("I heard you say " + v)
-    print "Ready!"
+try:
+    print("A moment of silence, please...")
+    with m as source:
+        r.adjust_for_ambient_noise(source)
+    print("Set minimum energy threshold to {}".format(r.energy_threshold))
 
-    '''Use this part for using Google Custom Search Engine API'''
-    '''g_res = google_results(a)
-    try:
-        print g_res
-        speak(g_res)
-    except AttributeError:
-        print "Oops! Didn't catch that"
-        speak("Oops! Didn't catch that")
-    except StopIteration:
-        print "Couldn't find anything here, sorry"
-        speak("Couldn't find anything here, sorry")
-    except KeyError:
-        speak("Oops!, I am afraid I didn't catch that Sir")
-    except:
-        print "Something went wrong, Try again"
-        speak("I am not sure what happened. Please try again")
-        # speak("I heard you say " + v)
-    print "Ready!" '''
+    while sleep:
+        print('Say Hallo to bring me to life...')
+        with m as source:audio = r.listen(source)
+        #print("Got it! Now to recognize it...")
+        try:
+            # recognize speech using Google Speech Recognition
+            value = r.recognize_google(audio, language="de_DE")
+
+            # we need some special handling here to correctly print unicode characters to standard output
+            if str is bytes:  # this version of Python uses bytes for strings (Python 2)
+                print(u"You said {}".format(value).encode("utf-8"))
+            else:  # this version of Python uses unicode for strings (Python 3+)
+                print("You said {}".format(value))
+
+            if 'Hallo' in value:
+                run = True
+                system('say -v Anna ' + translator.translate('Hello, how are you today?', dest='de').text) #Here is the
+                # speaking part
+                #speech_engine.runAndWait()
+
+        except sr.UnknownValueError:
+            print("Oops! Didn't catch that")
+        except sr.RequestError as e:
+            print("Uh oh! Couldn't request results from Google Speech Recognition service; {0}".format(e))
+
+        while run:
+            print("Say something!")
+            with m as source: audio = r.listen(source)
+            print("Got it! Now to recognize it...")
+            try:
+                # recognize speech using Google Speech Recognition
+                value = r.recognize_google(audio, language="de_DE")
+
+                if 'wiedersehen' in value:
+                    sleep = False
+                    run = False
+                    system('say -v Anna Auf wiedersehen')  # Here is
+                    #  the
+                    # speaking
+                    # part
+                    #speech_engine.runAndWait()
+                    continue
+
+                # we need some special handling here to correctly print unicode characters to standard output
+                if str is bytes:  # this version of Python uses bytes for strings (Python 2)
+                    print(u"You said {}".format(value).encode("utf-8"))
+                else:  # this version of Python uses unicode for strings (Python 3+)
+                    print("You said {}".format(value))
+
+                '''Here comes the code to react to the user answer about their well being'''
+                if greeting:
+                    data = [
+                        ('text', translator.translate(value, dest='en').text)
+                    ]
+
+                    resp1 = requests.Session().post('http://text-processing.com/api/sentiment/', data=data)
+                    resp1 = resp1.json()
+                    print(resp1)
+
+                    label = resp1.get("label")
+                    if label == "neg":
+                        system('say -v Anna ' + translator.translate('Sorry to hear that, hope you get better!',
+                                                                     dest='de').text)
+                    elif label == "pos":
+                        system('say -v Anna ' + translator.translate('Good to hear that!', dest='de').text)
+                    elif label == "neutral":
+                        system('say -v Anna ' + translator.translate('Good to hear from you!', dest='de').text)
+                    greeting = False
+                    continue
+
+                '''Here comes the code to respond if asked how the tree is'''
+                if 'Wie geht es dir' in value:
+                    humidity = 1
+                    temperature = 25
+                    system('say -v Anna ' + translator.translate('The humidity around me is' + str(humidity) + ' and the temperature is a pleasant ' + str(temperature) + ' degrees. I feel great!', dest='de').text)
+                    continue
+
+                value = translator.translate(value, dest='en').text
+                #Query the Wolframalpha client
+                params = (
+                    ('i', value),
+                    ('appid', '3P2YJL-Q8A29JJ674'),
+                )
+                resp = requests.Session().get('http://api.wolframalpha.com/v1/result', params=params)
+                print(resp.text)
+                system('say -v Anna ' + translator.translate(resp.text, dest='de').text)
+
+            except sr.UnknownValueError:
+                print("Oops! Didn't catch that")
+            except sr.RequestError as e:
+                print("Uh oh! Couldn't request results from Google Speech Recognition service; {0}".format(e))
+            #run = False
+except KeyboardInterrupt:
+    pass
