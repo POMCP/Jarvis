@@ -1,6 +1,6 @@
 # Jarvis - A smart personal assistant
 
-Be it the Iron Man series or Dexter's Laborotary, having a smart personal assistant has been a childhood dream of many. This project is an effort in this direction. While with the availability of several open source libraries have made it much easier for anyone to begin doing cool AI stuff, most of the current dialouge management in such personal assistants is rule based and put in abstract terms, 'Not human like'. A 'human like' conversation has a context and has a for of temporal continuity as the thought process evolves. Although this would be an optimal personal assitant, the goal of the project is a little less ambitious. 
+Be it the Iron Man series or Dexter's Laborotary, having a smart personal assistant like the one in these movies, has been a childhood dream of many. This project is an effort in this direction. While the availability of several open source libraries have made it much easier for anyone to begin doing cool AI stuff, most of the current dialouge management in such personal assistants is rule based and when put in abstract terms, 'Not human like'. A 'human like' conversation has a context and has a form of temporal continuity as the thought process evolves. Although this would be an optimal personal assitant, the goal of the project is a little less ambitious. 
 
 The core of the project will be based on latent semantic analysis to explore the 'context' as 'hidden topics' that are learnt form a corpus of text data, obtained from speech to text converters over several instances of such conversations.
 
@@ -8,7 +8,7 @@ The latent semantic analysis for subtopic extraction is based on the paper, Huan
 
 # Dependencies
 
-The code is being developed and tested on a windows system.
+The inital code was developed and tested on a windows system. The recent version has been tested on a Mac.
 The requirements.txt file contains the commands for installing all the necessary libraries to get the thing started.
 Note: python win32 has to be installed for windows OS corresponding to the version of python installed on the host system.
       Additionally an API key must be procured from Wolframalpha for the queries to return responses.
